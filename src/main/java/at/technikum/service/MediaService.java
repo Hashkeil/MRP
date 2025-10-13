@@ -1,0 +1,61 @@
+package at.technikum.service;
+
+import at.technikum.model.MediaEntry;
+import at.technikum.model.enums.AgeRestriction;
+import at.technikum.model.enums.MediaType;
+import at.technikum.repository.MediaRepository;
+import java.util.List;
+
+public class MediaService {
+
+    private final MediaRepository mediaRepository;
+
+    public MediaService(MediaRepository mediaRepository) {
+        this.mediaRepository = mediaRepository;
+    }
+
+    public MediaEntry createMedia(String title, String description, MediaType type,
+                                  Integer releaseYear, AgeRestriction ageRestriction,
+                                  Long creatorId, List<String> genres) {
+        MediaEntry media = new MediaEntry(title, description, type, releaseYear,
+                ageRestriction, creatorId);
+        if (genres != null) {
+            media.setGenres(genres);
+        }
+        return mediaRepository.save(media);
+    }
+
+    public MediaEntry getMediaById(Long id) throws Exception {
+        return mediaRepository.findById(id)
+                .orElseThrow(() -> new Exception("Media not found"));
+    }
+
+    public List<MediaEntry> getAllMedia() {
+        return mediaRepository.findAll();
+    }
+
+    public List<MediaEntry> getMediaByCreator(Long creatorId) {
+        return mediaRepository.findByCreatorId(creatorId);
+    }
+
+    public MediaEntry updateMedia(Long id, String title, String description,
+                                  Integer releaseYear, List<String> genres) throws Exception {
+        MediaEntry media = getMediaById(id);
+
+        if (title != null) media.setTitle(title);
+        if (description != null) media.setDescription(description);
+        if (releaseYear != null) media.setReleaseYear(releaseYear);
+        if (genres != null) media.setGenres(genres);
+
+        mediaRepository.update(media);
+        return media;
+    }
+
+    public boolean deleteMedia(Long id, Long userId) throws Exception {
+        MediaEntry media = getMediaById(id);
+        if (!media.isCreatedBy(userId)) {
+            throw new Exception("Not authorized to delete this media");
+        }
+        return mediaRepository.delete(id);
+    }
+}
