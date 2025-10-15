@@ -1,4 +1,3 @@
-// Favorite.java
 package at.technikum.model;
 
 import java.time.LocalDateTime;

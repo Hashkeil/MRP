@@ -1,3 +1,4 @@
+
 package at.technikum.service;
 
 import at.technikum.model.Rating;
@@ -9,10 +10,14 @@ import java.util.List;
 public class RatingService {
     private final RatingRepository ratingRepository;
     private final MediaRepository mediaRepository;
+    private final UserService userService;
 
-    public RatingService(RatingRepository ratingRepository, MediaRepository mediaRepository) {
+    public RatingService(RatingRepository ratingRepository,
+                         MediaRepository mediaRepository,
+                         UserService userService) {
         this.ratingRepository = ratingRepository;
         this.mediaRepository = mediaRepository;
+        this.userService = userService;
     }
 
     public Rating createRating(Long userId, Long mediaId, Integer stars, String comment) throws Exception {
@@ -26,6 +31,8 @@ public class RatingService {
         Rating rating = new Rating(userId, mediaId, stars, comment);
         rating = ratingRepository.save(rating);
         updateMediaRating(mediaId);
+        userService.updateUserStatistics(userId);
+
         return rating;
     }
 
@@ -40,6 +47,8 @@ public class RatingService {
         rating.updateRating(stars, comment);
         ratingRepository.update(rating);
         updateMediaRating(rating.getMediaId());
+        userService.updateUserStatistics(userId);
+
         return rating;
     }
 
@@ -47,15 +56,16 @@ public class RatingService {
         Rating rating = ratingRepository.findById(ratingId)
                 .orElseThrow(() -> new Exception("Rating not found"));
 
-        if (!rating.isOwnedBy(userId)) {
-            throw new Exception("Not authorized to delete this rating");
-        }
+        if (!rating.isOwnedBy(userId)) {throw new Exception("Not authorized to delete this rating");}
 
         Long mediaId = rating.getMediaId();
         boolean deleted = ratingRepository.delete(ratingId);
+
         if (deleted) {
             updateMediaRating(mediaId);
+            userService.updateUserStatistics(userId);
         }
+
         return deleted;
     }
 
@@ -68,9 +78,11 @@ public class RatingService {
         return rating;
     }
 
-    public Rating confirmRating(Long ratingId) throws Exception {
+    public Rating confirmRating(Long ratingId, Long userId) throws Exception {
         Rating rating = ratingRepository.findById(ratingId)
                 .orElseThrow(() -> new Exception("Rating not found"));
+
+        if (!rating.isOwnedBy(userId)) {throw new Exception("Not authorized to confirm this rating");}
 
         rating.confirmRating();
         ratingRepository.update(rating);

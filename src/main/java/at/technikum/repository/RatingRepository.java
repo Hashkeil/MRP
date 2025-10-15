@@ -2,7 +2,6 @@ package at.technikum.repository;
 
 import at.technikum.model.Rating;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class RatingRepository {
 
@@ -11,16 +10,13 @@ public class RatingRepository {
     private final Map<Long, List<Rating>> ratingsByMedia = new HashMap<>();
     private Long nextId = 1L;
 
+
     public Rating save(Rating rating) {
         if (rating.getId() == null) {
             rating.setId(nextId++);
         }
         ratings.put(rating.getId(), rating);
-
-        // Index by user
         ratingsByUser.computeIfAbsent(rating.getUserId(), k -> new ArrayList<>()).add(rating);
-
-        // Index by media
         ratingsByMedia.computeIfAbsent(rating.getMediaId(), k -> new ArrayList<>()).add(rating);
 
         return rating;
@@ -30,9 +26,6 @@ public class RatingRepository {
         return Optional.ofNullable(ratings.get(id));
     }
 
-    public List<Rating> findAll() {
-        return new ArrayList<>(ratings.values());
-    }
 
     public List<Rating> findByUserId(Long userId) {
         return new ArrayList<>(ratingsByUser.getOrDefault(userId, new ArrayList<>()));
@@ -48,22 +41,14 @@ public class RatingRepository {
                 .findFirst();
     }
 
-    public List<Rating> findConfirmedByMediaId(Long mediaId) {
-        return ratingsByMedia.getOrDefault(mediaId, new ArrayList<>()).stream()
-                .filter(Rating::isConfirmed)
-                .collect(Collectors.toList());
-    }
-
     public boolean delete(Long id) {
         Rating rating = ratings.remove(id);
         if (rating != null) {
-            // Remove from user index
             List<Rating> userRatings = ratingsByUser.get(rating.getUserId());
             if (userRatings != null) {
                 userRatings.remove(rating);
             }
 
-            // Remove from media index
             List<Rating> mediaRatings = ratingsByMedia.get(rating.getMediaId());
             if (mediaRatings != null) {
                 mediaRatings.remove(rating);
@@ -96,10 +81,6 @@ public class RatingRepository {
 
             ratings.put(rating.getId(), rating);
         }
-    }
-
-    public int countByMediaId(Long mediaId) {
-        return ratingsByMedia.getOrDefault(mediaId, new ArrayList<>()).size();
     }
 
     public int countByUserId(Long userId) {

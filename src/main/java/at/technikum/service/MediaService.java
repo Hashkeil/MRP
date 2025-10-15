@@ -4,7 +4,10 @@ import at.technikum.model.MediaEntry;
 import at.technikum.model.enums.AgeRestriction;
 import at.technikum.model.enums.MediaType;
 import at.technikum.repository.MediaRepository;
+
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MediaService {
 
@@ -57,5 +60,56 @@ public class MediaService {
             throw new Exception("Not authorized to delete this media");
         }
         return mediaRepository.delete(id);
+    }
+
+
+
+    public List<MediaEntry> searchByTitle(String query) {
+        return mediaRepository.findAll().stream()
+                .filter(m -> m.getTitle().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<MediaEntry> filterByGenre(String genre) {
+        return mediaRepository.findAll().stream()
+                .filter(m -> m.getGenres().contains(genre))
+                .collect(Collectors.toList());
+    }
+
+    public List<MediaEntry> filterByType(MediaType type) {
+        return mediaRepository.findAll().stream()
+                .filter(m -> m.getType() == type)
+                .collect(Collectors.toList());
+    }
+
+    public List<MediaEntry> filterByYear(Integer year) {
+        return mediaRepository.findAll().stream()
+                .filter(m -> m.getReleaseYear().equals(year))
+                .collect(Collectors.toList());
+    }
+
+    public List<MediaEntry> filterByAgeRestriction(AgeRestriction restriction) {
+        return mediaRepository.findAll().stream()
+                .filter(m -> m.getAgeRestriction() == restriction)
+                .collect(Collectors.toList());
+    }
+
+    public List<MediaEntry> sortMedia(List<MediaEntry> media, String sortBy) {
+        switch(sortBy) {
+            case "title":
+                return media.stream()
+                        .sorted(Comparator.comparing(MediaEntry::getTitle))
+                        .collect(Collectors.toList());
+            case "year":
+                return media.stream()
+                        .sorted(Comparator.comparing(MediaEntry::getReleaseYear).reversed())
+                        .collect(Collectors.toList());
+            case "rating":
+                return media.stream()
+                        .sorted(Comparator.comparing(MediaEntry::getAverageRating).reversed())
+                        .collect(Collectors.toList());
+            default:
+                return media;
+        }
     }
 }

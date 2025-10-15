@@ -16,23 +16,12 @@ public class FavoriteRepository {
             favorite.setId(nextId++);
         }
         favorites.put(favorite.getId(), favorite);
-
-        // Index by user
         favoritesByUser.computeIfAbsent(favorite.getUserId(), k -> new ArrayList<>()).add(favorite);
-
-        // Index by media
         favoritesByMedia.computeIfAbsent(favorite.getMediaId(), k -> new ArrayList<>()).add(favorite);
 
         return favorite;
     }
 
-    public Optional<Favorite> findById(Long id) {
-        return Optional.ofNullable(favorites.get(id));
-    }
-
-    public List<Favorite> findAll() {
-        return new ArrayList<>(favorites.values());
-    }
 
     public List<Favorite> findByUserId(Long userId) {
         return new ArrayList<>(favoritesByUser.getOrDefault(userId, new ArrayList<>()));
@@ -55,13 +44,11 @@ public class FavoriteRepository {
     public boolean delete(Long id) {
         Favorite favorite = favorites.remove(id);
         if (favorite != null) {
-            // Remove from user index
             List<Favorite> userFavorites = favoritesByUser.get(favorite.getUserId());
             if (userFavorites != null) {
                 userFavorites.remove(favorite);
             }
 
-            // Remove from media index
             List<Favorite> mediaFavorites = favoritesByMedia.get(favorite.getMediaId());
             if (mediaFavorites != null) {
                 mediaFavorites.remove(favorite);
@@ -74,13 +61,5 @@ public class FavoriteRepository {
     public boolean deleteByUserIdAndMediaId(Long userId, Long mediaId) {
         Optional<Favorite> favorite = findByUserIdAndMediaId(userId, mediaId);
         return favorite.map(f -> delete(f.getId())).orElse(false);
-    }
-
-    public int countByMediaId(Long mediaId) {
-        return favoritesByMedia.getOrDefault(mediaId, new ArrayList<>()).size();
-    }
-
-    public int countByUserId(Long userId) {
-        return favoritesByUser.getOrDefault(userId, new ArrayList<>()).size();
     }
 }

@@ -14,5 +14,4 @@ public class Response {
     public String getBody() { return body; }
     public String getContentType() { return contentType; }
 
-    public void setContentType(String contentType) { this.contentType = contentType; }
 }

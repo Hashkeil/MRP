@@ -22,11 +22,8 @@ public class Handler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        // Convert HttpExchange to Request
         Request request = convertToRequest(exchange);
-
         Response response = application.handle(request);
-
         sendResponse(exchange, response);
     }
 
@@ -35,13 +32,11 @@ public class Handler implements HttpHandler {
         request.setMethod(exchange.getRequestMethod());
         request.setPath(exchange.getRequestURI().getPath());
 
-        // Read body
         try (InputStream is = exchange.getRequestBody()) {
             String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             request.setBody(body);
         }
 
-        // Copy headers
         exchange.getRequestHeaders().forEach((key, values) -> {
             if (!values.isEmpty()) {
                 request.addHeader(key.toLowerCase(), values.get(0));

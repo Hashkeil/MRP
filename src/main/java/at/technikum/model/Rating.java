@@ -72,15 +72,8 @@ public class Rating {
         this.likesCount++;
     }
 
-    public void decrementLikes() {
-        if (this.likesCount > 0) {
-            this.likesCount--;
-        }
-    }
 
-    public boolean hasComment() {
-        return this.comment != null && !this.comment.trim().isEmpty();
-    }
+
 
     public boolean isOwnedBy(Long userId) {
         return Objects.equals(this.userId, userId);
@@ -90,7 +83,6 @@ public class Rating {
         setStars(stars);
         this.comment = comment;
         this.timestamp = LocalDateTime.now();
-        // Reset confirmation when rating is updated
         this.confirmed = false;
     }
 

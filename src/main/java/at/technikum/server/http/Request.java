@@ -34,25 +34,8 @@ public class Request {
     public void setPathParams(Map<String, String> pathParams) { this.pathParams = pathParams; }
 
     public String getPathParam(String name) { return pathParams.get(name); }
-    public void addPathParam(String name, String value) { this.pathParams.put(name, value); }
 
 
 
-    // Get Authorization token
-    public String getAuthToken() {
-        String authHeader = getHeader("authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
-        return null;
-    }
 
-    // Get path segments for REST routing
-    public String[] getPathSegments() {
-        if (path == null || path.equals("/")) {
-            return new String[0];
-        }
-        String cleanPath = path.startsWith("/") ? path.substring(1) : path;
-        return cleanPath.split("/");
-    }
 }

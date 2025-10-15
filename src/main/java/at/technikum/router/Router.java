@@ -20,14 +20,12 @@ public class Router {
         String method = request.getMethod();
         String path = request.getPath();
 
-        // Exact match
         String key = method + ":" + path;
         if (routes.containsKey(key)) return routes.get(key);
 
-        //  Match with path parameters
         for (String routeKey : routes.keySet()) {
             String[] parts = routeKey.split(":");
-            if (!parts[0].equals(method)) continue; // method must match
+            if (!parts[0].equals(method)) continue;
 
             String routePath = parts[1];
             Map<String, String> params = matchPathWithParams(routePath, path);
@@ -37,7 +35,7 @@ public class Router {
             }
         }
 
-        return null; // no match
+        return null;
     }
 
     private Map<String, String> matchPathWithParams(String route, String path) {

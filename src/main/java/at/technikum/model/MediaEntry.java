@@ -1,7 +1,6 @@
 package at.technikum.model;
 
 import at.technikum.model.enums.AgeRestriction;
-import at.technikum.model.enums.Genre;
 import at.technikum.model.enums.MediaType;
 
 import java.time.LocalDateTime;
@@ -108,29 +107,13 @@ public class MediaEntry {
 
 
 
-    // Business methods
-    public void addGenre(String genre) {
-        if (!this.genres.contains(genre)) {
-            this.genres.add(genre);
-            updateLastModified();
-        }
-    }
 
-    public void removeGenre(String genre) {
-        if (this.genres.remove(genre)) {
-            updateLastModified(); }
-    }
 
-    public boolean hasGenre(String genre) {
-        return this.genres.contains(genre);
-    }
 
     public void updateAverageRating(double newAverage, int totalCount) {
         this.averageRating = newAverage;
         this.totalRatings = totalCount;
     }
-
-
 
     public void incrementFavorites() {
         this.favoritesCount++;

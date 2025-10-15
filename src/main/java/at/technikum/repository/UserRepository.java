@@ -13,7 +13,7 @@ public class UserRepository {
 
     private Long nextId = 1L;
 
-    //add User
+
     public User save(User user) {
         if (user.getId() == null) {
             user.setId(nextId++);
@@ -24,7 +24,7 @@ public class UserRepository {
         return user;
     }
 
-    //find user by id or username
+
     public Optional<User> findById(Long id) {
         return Optional.ofNullable(users.get(id));
     }
