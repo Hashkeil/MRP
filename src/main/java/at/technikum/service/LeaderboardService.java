@@ -3,6 +3,8 @@ package at.technikum.service;
 import at.technikum.model.User;
 import at.technikum.repository.RatingRepository;
 import at.technikum.repository.UserRepository;
+
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,7 +17,7 @@ public class LeaderboardService {
         this.ratingRepository = ratingRepository;
     }
 
-    public List<Map<String, Object>> getLeaderboard() {
+    public List<Map<String, Object>> getLeaderboard() throws SQLException {
         List<User> allUsers = userRepository.findAll();
 
         return allUsers.stream()

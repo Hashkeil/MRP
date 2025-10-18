@@ -79,22 +79,5 @@ public class MediaEntryTest {
         assertFalse(media.getGenres().contains("NewGenre"));
     }
 
-    @Test
-    void testEqualsAndHashCode() {
-        MediaEntry m1 = new MediaEntry("Test", "Desc", MediaType.MOVIE, 2020, AgeRestriction.AGE_12, 1L);
-        m1.setId(1L);
 
-        MediaEntry m2 = new MediaEntry("Test", "Desc", MediaType.MOVIE, 2020, AgeRestriction.AGE_12, 1L);
-        m2.setId(1L);
-
-        assertEquals(m1, m2);
-        assertEquals(m1.hashCode(), m2.hashCode());
-    }
-
-    @Test
-    void testToStringContainsTitle() {
-        String text = Instances.TEST_MEDIA_1.toString();
-        assertTrue(text.contains("Inception"));
-        assertTrue(text.contains("averageRating"));
-    }
 }

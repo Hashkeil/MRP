@@ -5,6 +5,7 @@ import at.technikum.model.enums.AgeRestriction;
 import at.technikum.model.enums.MediaType;
 import at.technikum.repository.MediaRepository;
 
+import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class MediaService {
 
     public MediaEntry createMedia(String title, String description, MediaType type,
                                   Integer releaseYear, AgeRestriction ageRestriction,
-                                  Long creatorId, List<String> genres) {
+                                  Long creatorId, List<String> genres) throws SQLException {
         MediaEntry media = new MediaEntry(title, description, type, releaseYear,
                 ageRestriction, creatorId);
         if (genres != null) {
@@ -33,11 +34,11 @@ public class MediaService {
                 .orElseThrow(() -> new Exception("Media not found"));
     }
 
-    public List<MediaEntry> getAllMedia() {
+    public List<MediaEntry> getAllMedia() throws SQLException {
         return mediaRepository.findAll();
     }
 
-    public List<MediaEntry> getMediaByCreator(Long creatorId) {
+    public List<MediaEntry> getMediaByCreator(Long creatorId) throws SQLException {
         return mediaRepository.findByCreatorId(creatorId);
     }
 
@@ -64,31 +65,31 @@ public class MediaService {
 
 
 
-    public List<MediaEntry> searchByTitle(String query) {
+    public List<MediaEntry> searchByTitle(String query) throws SQLException {
         return mediaRepository.findAll().stream()
                 .filter(m -> m.getTitle().toLowerCase().contains(query.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
-    public List<MediaEntry> filterByGenre(String genre) {
+    public List<MediaEntry> filterByGenre(String genre) throws SQLException {
         return mediaRepository.findAll().stream()
                 .filter(m -> m.getGenres().contains(genre))
                 .collect(Collectors.toList());
     }
 
-    public List<MediaEntry> filterByType(MediaType type) {
+    public List<MediaEntry> filterByType(MediaType type) throws SQLException {
         return mediaRepository.findAll().stream()
                 .filter(m -> m.getType() == type)
                 .collect(Collectors.toList());
     }
 
-    public List<MediaEntry> filterByYear(Integer year) {
+    public List<MediaEntry> filterByYear(Integer year) throws SQLException {
         return mediaRepository.findAll().stream()
                 .filter(m -> m.getReleaseYear().equals(year))
                 .collect(Collectors.toList());
     }
 
-    public List<MediaEntry> filterByAgeRestriction(AgeRestriction restriction) {
+    public List<MediaEntry> filterByAgeRestriction(AgeRestriction restriction) throws SQLException {
         return mediaRepository.findAll().stream()
                 .filter(m -> m.getAgeRestriction() == restriction)
                 .collect(Collectors.toList());

@@ -4,6 +4,8 @@ import at.technikum.model.Favorite;
 import at.technikum.model.MediaEntry;
 import at.technikum.repository.FavoriteRepository;
 import at.technikum.repository.MediaRepository;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class FavoriteService {
@@ -32,6 +34,7 @@ public class FavoriteService {
         return favorite;
     }
 
+
     public boolean removeFavorite(Long userId, Long mediaId) throws Exception {
         if (!favoriteRepository.existsByUserIdAndMediaId(userId, mediaId)) {
             throw new Exception("Favorite not found");
@@ -48,11 +51,12 @@ public class FavoriteService {
         return deleted;
     }
 
-    public List<Favorite> getUserFavorites(Long userId) {
+
+    public List<Favorite> getUserFavorites(Long userId) throws SQLException {
         return favoriteRepository.findByUserId(userId);
     }
 
-    public List<Favorite> getMediaFavorites(Long mediaId) {
+    public List<Favorite> getMediaFavorites(Long mediaId) throws SQLException {
         return favoriteRepository.findByMediaId(mediaId);
     }
 }

@@ -5,6 +5,8 @@ import at.technikum.model.Rating;
 import at.technikum.model.MediaEntry;
 import at.technikum.repository.RatingRepository;
 import at.technikum.repository.MediaRepository;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class RatingService {
@@ -89,11 +91,11 @@ public class RatingService {
         return rating;
     }
 
-    public List<Rating> getRatingsByUserId(Long userId) {
+    public List<Rating> getRatingsByUserId(Long userId) throws SQLException {
         return ratingRepository.findByUserId(userId);
     }
 
-    public List<Rating> getRatingsByMediaId(Long mediaId) {
+    public List<Rating> getRatingsByMediaId(Long mediaId) throws SQLException {
         return ratingRepository.findByMediaId(mediaId);
     }
 

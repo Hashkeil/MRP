@@ -4,6 +4,7 @@ import at.technikum.exception.user.UserAlreadyExistsException;
 import at.technikum.model.User;
 import at.technikum.repository.UserRepository;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class AuthService {
@@ -14,7 +15,7 @@ public class AuthService {
     }
 
 
-    public User register(String username, String password) {
+    public User register(String username, String password) throws SQLException {
         if (userRepository.existsByUsername(username)) {
             throw new UserAlreadyExistsException(username);}
         User user = new User(username, password);
