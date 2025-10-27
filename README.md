@@ -7,13 +7,12 @@ A standalone **Java 21** application implementing a **RESTful HTTP server** that
 
 ## 📑 Table of Contents
 
-- [Project Overview](#project-overview)  
-- [Features](#features)  
+- [Project Overview](#-project-overview)  
+- [Features](#-features)  
 - [Current Progress](#current-progress)  
-- [Technologies Used](#technologies-used)  
-- [Setup and Run](#setup-and-run)  
+- [Technologies Used](#-technologies-used)  
+- [Setup and Run](#-setup-and-run)  
 - [Testing](#testing)  
-- [Future Work](#future-work)  
 - [API Endpoints](#api-endpoints)
 
 ---
@@ -51,7 +50,7 @@ Authentication uses **token-based authorization**, and the database is managed v
 ✅ PostgreSQL **Docker container** successfully connected  
 ✅ Entities and database integration tested  
 ✅ Unit tests (JUnit 5 + Mockito) for models and services  
-✅ Basic API endpoints under development  
+✅ Fully operational REST API backend
 
 ---
 

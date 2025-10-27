@@ -41,8 +41,8 @@ public class SimpleApplication {
         this.mediaController = new MediaController(mediaService, authService);
         this.ratingController = new RatingController(ratingService, authService);
         this.favoriteController = new FavoriteController(favoriteService, authService);
-        this.recommendationController = new RecommendationController(recommendationService, authService); // ADDED authService
-        this.leaderboardController = new LeaderboardController(leaderboardService, authService); // ADDED authService
+        this.recommendationController = new RecommendationController(recommendationService, authService);
+        this.leaderboardController = new LeaderboardController(leaderboardService, authService);
 
         this.router = new Router();
         setupRoutes();
@@ -73,8 +73,8 @@ public class SimpleApplication {
         router.addRoute("DELETE", "/api/media/{mediaId}", req -> mediaController.deleteMedia(req));
 
         //  RATING ROUTES
-        router.addRoute("POST", "/api/media/{mediaId}/ratings", req -> ratingController.rateMedia(req));
-        router.addRoute("GET", "/api/media/{mediaId}/ratings", req -> ratingController.getMediaRatings(req));
+        router.addRoute("POST", "/api/media/{mediaId}/rate", req -> ratingController.rateMedia(req));
+        router.addRoute("GET", "/api/media/{mediaId}/rate", req -> ratingController.getMediaRatings(req));
         router.addRoute("GET", "/api/users/{userId}/ratings", req -> ratingController.getUserRatings(req));
         router.addRoute("PUT", "/api/ratings/{ratingId}", req -> ratingController.updateRating(req));
         router.addRoute("DELETE", "/api/ratings/{ratingId}", req -> ratingController.deleteRating(req));
@@ -82,8 +82,8 @@ public class SimpleApplication {
         router.addRoute("POST", "/api/ratings/{ratingId}/confirm", req -> ratingController.confirmRating(req));
 
         //  FAVORITE ROUTES
-        router.addRoute("POST", "/api/media/{mediaId}/favorites", req -> favoriteController.addFavorite(req));
-        router.addRoute("DELETE", "/api/media/{mediaId}/favorites", req -> favoriteController.removeFavorite(req));
+        router.addRoute("POST", "/api/media/{mediaId}/favorite", req -> favoriteController.addFavorite(req));
+        router.addRoute("DELETE", "/api/media/{mediaId}/favorite", req -> favoriteController.removeFavorite(req));
 
         // RECOMMENDATION ROUTES
         router.addRoute("GET", "/api/users/{userId}/recommendations", req -> recommendationController.getRecommendations(req));

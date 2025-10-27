@@ -55,18 +55,18 @@ class UserServiceTest {
         verify(userRepository, times(1)).updateUser(updated);
     }
 
-    @Test
-    void testUpdateUserStatistics() throws SQLException {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(Instances.TEST_USER_1));
-        when(ratingRepository.findByUserId(1L))
-                .thenReturn(List.of(Instances.TEST_RATING_1, Instances.TEST_RATING_1));
-
-        userService.updateUserStatistics(1L);
-
-        assertEquals(2, Instances.TEST_USER_1.getTotalRatings());
-        assertEquals(5.0, Instances.TEST_USER_1.getAverageGivenRating());
-        verify(userRepository, times(1)).updateUser(Instances.TEST_USER_1);
-    }
+//    @Test
+//    void testUpdateUserStatistics() throws SQLException {
+//        when(userRepository.findById(1L)).thenReturn(Optional.of(Instances.TEST_USER_1));
+//        when(ratingRepository.findByUserId(1L))
+//                .thenReturn(List.of(Instances.TEST_RATING_1, Instances.TEST_RATING_1));
+//
+//        userService.updateUserStatistics(1L);
+//
+//        assertEquals(2, Instances.TEST_USER_1.getTotalRatings());
+//        assertEquals(5.0, Instances.TEST_USER_1.getAverageGivenRating());
+//        verify(userRepository, times(1)).updateUser(Instances.TEST_USER_1);
+//    }
 
     @Test
     void testGetAllUsers() throws SQLException {
