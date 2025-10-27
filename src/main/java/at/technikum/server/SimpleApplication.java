@@ -63,9 +63,16 @@ public class SimpleApplication {
         router.addRoute("GET", "/api/users/{userId}/favorites", req -> favoriteController.getUserFavorites(req));
 
         //  MEDIA ROUTES
-        // Public endpoints
+        //  Public endpoints
         router.addRoute("GET", "/api/media", req -> mediaController.getAllMedia(req));
         router.addRoute("GET", "/api/media/{mediaId}", req -> mediaController.getMedia(req));
+
+        // Search and Filter endpoints (REQUIRED BY SPEC)
+        router.addRoute("GET", "/api/media/search/{query}", req -> mediaController.searchMedia(req));
+        router.addRoute("GET", "/api/media/filter/genre/{genre}", req -> mediaController.filterByGenre(req));
+        router.addRoute("GET", "/api/media/filter/type/{type}", req -> mediaController.filterByType(req));
+        router.addRoute("GET", "/api/media/filter/year/{year}", req -> mediaController.filterByYear(req));
+        router.addRoute("GET", "/api/media/filter/age/{age}", req -> mediaController.filterByAgeRestriction(req));
 
         // Protected endpoints
         router.addRoute("POST", "/api/media", req -> mediaController.createMedia(req));

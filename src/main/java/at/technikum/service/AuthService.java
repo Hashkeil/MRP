@@ -3,7 +3,7 @@ package at.technikum.service;
 import at.technikum.exception.user.UserAlreadyExistsException;
 import at.technikum.model.User;
 import at.technikum.repository.UserRepository;
-
+import org.mindrot.jbcrypt.BCrypt;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -18,7 +18,8 @@ public class AuthService {
     public User register(String username, String password) throws SQLException {
         if (userRepository.existsByUsername(username)) {
             throw new UserAlreadyExistsException(username);}
-        User user = new User(username, password);
+     String hashedPaassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        User user = new User(username, hashedPaassword);
         return userRepository.save(user);
     }
 
@@ -29,7 +30,7 @@ public class AuthService {
         if (userOpt.isEmpty()) {throw new Exception("Invalid username or password");}
 
         User user = userOpt.get();
-        if (!user.getPassword().equals(password)) {throw new Exception("Invalid username or password");}
+        if (!BCrypt.checkpw(password,user.getPassword())) {throw new Exception("Invalid username or password");}
 
         String token = generateToken(user.getUsername());
         user.setToken(token);

@@ -129,6 +129,113 @@ public class MediaController {
     }
 
 
+
+    // GET /api/media/search?query=...
+    public Response searchMedia(Request request) {
+        try {
+            String query = request.getPathParam("query");
+            if (query == null || query.isEmpty()) {
+                return new Response(Status.BAD_REQUEST.getCode(),
+                        new JSONObject().put("error", "Search query is required").toString());
+            }
+
+            List<MediaEntry> mediaList = mediaService.searchByTitle(query);
+            JSONArray jsonArray = new JSONArray();
+
+            for (MediaEntry media : mediaList) {
+                jsonArray.put(buildMediaJson(media));
+            }
+
+            return new Response(Status.OK.getCode(), jsonArray.toString());
+        } catch (Exception e) {
+            return new Response(Status.INTERNAL_SERVER_ERROR.getCode(),
+                    new JSONObject().put("error", e.getMessage()).toString());
+        }
+    }
+
+    // GET /api/media/filter/genre/{genre}
+    public Response filterByGenre(Request request) {
+        try {
+            String genre = request.getPathParam("genre");
+            List<MediaEntry> mediaList = mediaService.filterByGenre(genre);
+
+            JSONArray jsonArray = new JSONArray();
+            for (MediaEntry media : mediaList) {
+                jsonArray.put(buildMediaJson(media));
+            }
+
+            return new Response(Status.OK.getCode(), jsonArray.toString());
+        } catch (Exception e) {
+            return new Response(Status.INTERNAL_SERVER_ERROR.getCode(),
+                    new JSONObject().put("error", e.getMessage()).toString());
+        }
+    }
+
+    // GET /api/media/filter/type/{type}
+    public Response filterByType(Request request) {
+        try {
+            String typeStr = request.getPathParam("type");
+            MediaType type = MediaType.valueOf(typeStr.toUpperCase());
+            List<MediaEntry> mediaList = mediaService.filterByType(type);
+
+            JSONArray jsonArray = new JSONArray();
+            for (MediaEntry media : mediaList) {
+                jsonArray.put(buildMediaJson(media));
+            }
+
+            return new Response(Status.OK.getCode(), jsonArray.toString());
+        } catch (IllegalArgumentException e) {
+            return new Response(Status.BAD_REQUEST.getCode(),
+                    new JSONObject().put("error", "Invalid media type").toString());
+        } catch (Exception e) {
+            return new Response(Status.INTERNAL_SERVER_ERROR.getCode(),
+                    new JSONObject().put("error", e.getMessage()).toString());
+        }
+    }
+
+    // GET /api/media/filter/year/{year}
+    public Response filterByYear(Request request) {
+        try {
+            Integer year = Integer.parseInt(request.getPathParam("year"));
+            List<MediaEntry> mediaList = mediaService.filterByYear(year);
+
+            JSONArray jsonArray = new JSONArray();
+            for (MediaEntry media : mediaList) {
+                jsonArray.put(buildMediaJson(media));
+            }
+
+            return new Response(Status.OK.getCode(), jsonArray.toString());
+        } catch (NumberFormatException e) {
+            return new Response(Status.BAD_REQUEST.getCode(),
+                    new JSONObject().put("error", "Invalid year format").toString());
+        } catch (Exception e) {
+            return new Response(Status.INTERNAL_SERVER_ERROR.getCode(),
+                    new JSONObject().put("error", e.getMessage()).toString());
+        }
+    }
+
+    // GET /api/media/filter/age/{age}
+    public Response filterByAgeRestriction(Request request) {
+        try {
+            String ageStr = request.getPathParam("age");
+            AgeRestriction restriction = AgeRestriction.valueOf(ageStr.toUpperCase());
+            List<MediaEntry> mediaList = mediaService.filterByAgeRestriction(restriction);
+
+            JSONArray jsonArray = new JSONArray();
+            for (MediaEntry media : mediaList) {
+                jsonArray.put(buildMediaJson(media));
+            }
+
+            return new Response(Status.OK.getCode(), jsonArray.toString());
+        } catch (IllegalArgumentException e) {
+            return new Response(Status.BAD_REQUEST.getCode(),
+                    new JSONObject().put("error", "Invalid age restriction.").toString());
+        } catch (Exception e) {
+            return new Response(Status.INTERNAL_SERVER_ERROR.getCode(),
+                    new JSONObject().put("error", e.getMessage()).toString());
+        }
+    }
+
     // DELETE /api/media/{mediaId}
     public Response deleteMedia(Request request) {
         try {
