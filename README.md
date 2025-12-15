@@ -15,7 +15,7 @@ The frontend (Web, Mobile, or Console) is **not part of this project**.
 - [Setup and Run](#-setup-and-run)
 - [Authorization](#-authorization)
 - [Testing](#-testing)
-- [API Endpoints](#-api-endpoints)
+
 
 ---
 
