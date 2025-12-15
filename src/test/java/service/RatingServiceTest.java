@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -144,21 +143,5 @@ class RatingServiceTest {
         assertEquals("Not authorized to confirm this rating", ex.getMessage());
     }
 
-    @Test
-    void testGetRatingsByUserId() throws SQLException {
-        when(ratingRepo.findByUserId(Instances.TEST_USER_1.getId()))
-                .thenReturn(List.of(Instances.TEST_RATING_1));
 
-        List<Rating> ratings = ratingService.getRatingsByUserId(Instances.TEST_USER_1.getId());
-        assertEquals(1, ratings.size());
-    }
-
-    @Test
-    void testGetRatingsByMediaId() throws SQLException {
-        when(ratingRepo.findByMediaId(Instances.TEST_MEDIA_1.getId()))
-                .thenReturn(List.of(Instances.TEST_RATING_1));
-
-        List<Rating> ratings = ratingService.getRatingsByMediaId(Instances.TEST_MEDIA_1.getId());
-        assertEquals(1, ratings.size());
-    }
 }

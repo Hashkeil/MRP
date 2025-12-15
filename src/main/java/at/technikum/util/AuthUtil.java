@@ -19,19 +19,7 @@ public class AuthUtil {
         }
     }
 
-    public static void requireOwnership(Long authenticatedUserId, Long resourceOwnerId) throws Exception {
-        if (!authenticatedUserId.equals(resourceOwnerId)) {
-            throw new Exception("Not authorized to perform this action");
-        }
-    }
 
 
-    public static User tryAuth(String authHeader, AuthService authService) {
-        try {
-            String token = authService.extractToken(authHeader);
-            return authService.validateToken(token);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+
 }

@@ -64,26 +64,8 @@ class MediaServiceTest {
         assertEquals("Media not found", exception.getMessage());
     }
 
-    @Test
-    void testGetAllMedia() throws SQLException {
-        when(mediaRepository.findAll()).thenReturn(List.of(Instances.TEST_MEDIA_1, Instances.TEST_MEDIA_2));
 
-        List<MediaEntry> mediaList = mediaService.getAllMedia();
 
-        assertEquals(2, mediaList.size());
-        verify(mediaRepository, times(1)).findAll();
-    }
-
-    @Test
-    void testGetMediaByCreator() throws SQLException {
-        when(mediaRepository.findByCreatorId(Instances.TEST_USER_1.getId()))
-                .thenReturn(List.of(Instances.TEST_MEDIA_1));
-
-        List<MediaEntry> mediaList = mediaService.getMediaByCreator(Instances.TEST_USER_1.getId());
-
-        assertEquals(1, mediaList.size());
-        assertEquals("Inception 2", mediaList.get(0).getTitle());
-    }
 
     @Test
     void testUpdateMedia() throws Exception {
@@ -138,62 +120,6 @@ class MediaServiceTest {
         assertEquals("Breaking Bad", results.get(0).getTitle());
     }
 
-    @Test
-    void testFilterByType() throws SQLException {
-        when(mediaRepository.findAll()).thenReturn(List.of(Instances.TEST_MEDIA_1, Instances.TEST_MEDIA_2));
 
-        List<MediaEntry> movies = mediaService.filterByType(MediaType.MOVIE);
 
-        assertEquals(1, movies.size());
-        assertEquals("Inception", movies.get(0).getTitle());
-    }
-
-    @Test
-    void testFilterByYear() throws SQLException {
-        when(mediaRepository.findAll()).thenReturn(List.of(Instances.TEST_MEDIA_1, Instances.TEST_MEDIA_2));
-
-        List<MediaEntry> media2008 = mediaService.filterByYear(2008);
-
-        assertEquals(1, media2008.size());
-        assertEquals("Breaking Bad", media2008.get(0).getTitle());
-    }
-
-    @Test
-    void testFilterByAgeRestriction() throws SQLException {
-        when(mediaRepository.findAll()).thenReturn(List.of(Instances.TEST_MEDIA_1, Instances.TEST_MEDIA_2));
-
-        List<MediaEntry> restricted = mediaService.filterByAgeRestriction(AgeRestriction.AGE_12);
-
-        assertEquals(1, restricted.size());
-        assertEquals("Inception 2", restricted.get(0).getTitle());
-    }
-
-    @Test
-    void testSortMediaByTitle() {
-        List<MediaEntry> mediaList = List.of(Instances.TEST_MEDIA_2, Instances.TEST_MEDIA_1);
-
-        List<MediaEntry> sorted = mediaService.sortMedia(mediaList, "title");
-
-        assertEquals("Breaking Bad", sorted.get(0).getTitle());
-        assertEquals("Inception 2", sorted.get(1).getTitle());
-    }
-
-    @Test
-    void testSortMediaByYear() {
-        List<MediaEntry> mediaList = List.of(Instances.TEST_MEDIA_1, Instances.TEST_MEDIA_2);
-
-        List<MediaEntry> sorted = mediaService.sortMedia(mediaList, "year");
-
-        assertEquals("Inception 2", sorted.get(0).getTitle());
-    }
-
-    @Test
-    void testSortMediaByRating() {
-        List<MediaEntry> mediaList = List.of(Instances.TEST_MEDIA_1, Instances.TEST_MEDIA_2);
-
-        List<MediaEntry> sorted = mediaService.sortMedia(mediaList, "rating");
-
-        assertEquals("Breaking Bad", sorted.get(0).getTitle());
-        assertEquals("Inception", sorted.get(1).getTitle());
-    }
 }

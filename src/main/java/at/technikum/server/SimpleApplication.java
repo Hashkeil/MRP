@@ -50,53 +50,53 @@ public class SimpleApplication {
 
     private void setupRoutes() {
         //  AUTHENTICATION ROUTES
-        router.addRoute("POST", "/api/users/register", req -> authController.register(req));
-        router.addRoute("POST", "/api/users/login", req -> authController.login(req));
+        router.addRoute("POST", "/api/users/register", authController::register);
+        router.addRoute("POST", "/api/users/login", authController::login);
 
         //  AUTHENTICATION ROUTES
-        router.addRoute("POST", "/api/users/logout", req -> authController.logout(req));
+        router.addRoute("POST", "/api/users/logout", authController::logout);
 
         //  USER ROUTES
-        router.addRoute("GET", "/api/users/{userId}/profile", req -> userController.getProfile(req));
-        router.addRoute("PUT", "/api/users/{userId}/profile", req -> userController.updateProfile(req));
-        router.addRoute("GET", "/api/users/{userId}/stats", req -> userController.getRatings(req));
-        router.addRoute("GET", "/api/users/{userId}/favorites", req -> favoriteController.getUserFavorites(req));
+        router.addRoute("GET", "/api/users/{userId}/profile", userController::getProfile);
+        router.addRoute("PUT", "/api/users/{userId}/profile", userController::updateProfile);
+        router.addRoute("GET", "/api/users/{userId}/stats", userController::getRatings);
+        router.addRoute("GET", "/api/users/{userId}/favorites", favoriteController::getUserFavorites);
 
         //  MEDIA ROUTES
         //  Public endpoints
-        router.addRoute("GET", "/api/media", req -> mediaController.getAllMedia(req));
-        router.addRoute("GET", "/api/media/{mediaId}", req -> mediaController.getMedia(req));
+        router.addRoute("GET", "/api/media", mediaController::getAllMedia);
+        router.addRoute("GET", "/api/media/{mediaId}", mediaController::getMedia);
 
         // Search and Filter endpoints (REQUIRED BY SPEC)
-        router.addRoute("GET", "/api/media/search/{query}", req -> mediaController.searchMedia(req));
-        router.addRoute("GET", "/api/media/filter/genre/{genre}", req -> mediaController.filterByGenre(req));
-        router.addRoute("GET", "/api/media/filter/type/{type}", req -> mediaController.filterByType(req));
-        router.addRoute("GET", "/api/media/filter/year/{year}", req -> mediaController.filterByYear(req));
-        router.addRoute("GET", "/api/media/filter/age/{age}", req -> mediaController.filterByAgeRestriction(req));
+        router.addRoute("GET", "/api/media/search/{query}", mediaController::searchMedia);
+        router.addRoute("GET", "/api/media/filter/genre/{genre}", mediaController::filterByGenre);
+        router.addRoute("GET", "/api/media/filter/type/{type}", mediaController::filterByType);
+        router.addRoute("GET", "/api/media/filter/year/{year}", mediaController::filterByYear);
+        router.addRoute("GET", "/api/media/filter/age/{age}", mediaController::filterByAgeRestriction);
 
         // Protected endpoints
-        router.addRoute("POST", "/api/media", req -> mediaController.createMedia(req));
-        router.addRoute("PUT", "/api/media/{mediaId}", req -> mediaController.updateMedia(req));
-        router.addRoute("DELETE", "/api/media/{mediaId}", req -> mediaController.deleteMedia(req));
+        router.addRoute("POST", "/api/media", mediaController::createMedia);
+        router.addRoute("PUT", "/api/media/{mediaId}", mediaController::updateMedia);
+        router.addRoute("DELETE", "/api/media/{mediaId}", mediaController::deleteMedia);
 
         //  RATING ROUTES
-        router.addRoute("POST", "/api/media/{mediaId}/rate", req -> ratingController.rateMedia(req));
-        router.addRoute("GET", "/api/media/{mediaId}/rate", req -> ratingController.getMediaRatings(req));
-        router.addRoute("GET", "/api/users/{userId}/ratings", req -> ratingController.getUserRatings(req));
-        router.addRoute("PUT", "/api/ratings/{ratingId}", req -> ratingController.updateRating(req));
-        router.addRoute("DELETE", "/api/ratings/{ratingId}", req -> ratingController.deleteRating(req));
-        router.addRoute("POST", "/api/ratings/{ratingId}/like", req -> ratingController.likeRating(req));
-        router.addRoute("POST", "/api/ratings/{ratingId}/confirm", req -> ratingController.confirmRating(req));
+        router.addRoute("POST", "/api/media/{mediaId}/rate", ratingController::rateMedia);
+        router.addRoute("GET", "/api/media/{mediaId}/rate", ratingController::getMediaRatings);
+        router.addRoute("GET", "/api/users/{userId}/ratings", ratingController::getUserRatings);
+        router.addRoute("PUT", "/api/ratings/{ratingId}", ratingController::updateRating);
+        router.addRoute("DELETE", "/api/ratings/{ratingId}", ratingController::deleteRating);
+        router.addRoute("POST", "/api/ratings/{ratingId}/like", ratingController::likeRating);
+        router.addRoute("POST", "/api/ratings/{ratingId}/confirm", ratingController::confirmRating);
 
         //  FAVORITE ROUTES
-        router.addRoute("POST", "/api/media/{mediaId}/favorite", req -> favoriteController.addFavorite(req));
-        router.addRoute("DELETE", "/api/media/{mediaId}/favorite", req -> favoriteController.removeFavorite(req));
+        router.addRoute("POST", "/api/media/{mediaId}/favorite", favoriteController::addFavorite);
+        router.addRoute("DELETE", "/api/media/{mediaId}/favorite", favoriteController::removeFavorite);
 
         // RECOMMENDATION ROUTES
-        router.addRoute("GET", "/api/users/{userId}/recommendations", req -> recommendationController.getRecommendations(req));
+        router.addRoute("GET", "/api/users/{userId}/recommendations", recommendationController::getRecommendations);
 
         //  LEADERBOARD ROUTES
-        router.addRoute("GET", "/api/leaderboard", req -> leaderboardController.getLeaderboard(req));
+        router.addRoute("GET", "/api/leaderboard", leaderboardController::getLeaderboard);
     }
 
     public Response handle(Request request) {

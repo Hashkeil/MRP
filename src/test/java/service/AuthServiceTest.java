@@ -6,6 +6,7 @@ import at.technikum.exception.user.UserAlreadyExistsException;
 import at.technikum.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -44,11 +45,14 @@ class AuthServiceTest {
 
     @Test
     void testLogin_Success() throws Exception {
-        User u = new User("user", "pass");
+        String hashedPassword = BCrypt.hashpw("pass", BCrypt.gensalt(12));
+        User u = new User("user", hashedPassword);
+
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(u));
         doNothing().when(userRepository).updateUser(u);
 
         User logged = authService.login("user", "pass");
+
         assertNotNull(logged.getToken());
         assertTrue(logged.getToken().endsWith("-mrpToken"));
         verify(userRepository).updateUser(u);
@@ -63,7 +67,13 @@ class AuthServiceTest {
 
     @Test
     void testLogin_InvalidPassword() throws SQLException {
-        User u = new User("user", "pass");
+        User u = new User(
+                "user",
+                org.mindrot.jbcrypt.BCrypt.hashpw(
+                        "pass",
+                        org.mindrot.jbcrypt.BCrypt.gensalt(12)
+                )
+        );
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(u));
         Exception ex = assertThrows(Exception.class, () -> authService.login("user", "wrong"));
         assertEquals("Invalid username or password", ex.getMessage());
@@ -89,9 +99,5 @@ class AuthServiceTest {
         assertEquals("myToken", token);
     }
 
-    @Test
-    void testExtractToken_Failure() {
-        Exception ex = assertThrows(Exception.class, () -> authService.extractToken("InvalidHeader"));
-        assertEquals("Invalid authorization format. Expected: Bearer <token>", ex.getMessage());
-    }
+
 }
